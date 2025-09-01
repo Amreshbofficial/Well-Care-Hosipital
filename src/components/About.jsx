@@ -15,8 +15,22 @@ const About = () => {
             </p>
             <button className="btn-primary">Learn More</button>
           </div>
-          <div className="bg-gray-200 h-96 rounded-lg flex items-center justify-center">
-            <span className="text-gray-500">Hospital Image</span>
+          <div className="relative">
+            <div className="bg-gradient-to-br from-primary-50 to-primary-100 h-96 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-center border border-primary-200">
+              {/* Professional Medical Team Illustration */}
+              <div className="text-center text-primary-700">
+                <div className="flex justify-center space-x-4 mb-4">
+                  <div className="text-5xl">👨‍⚕️</div>
+                  <div className="text-5xl">👩‍⚕️</div>
+                </div>
+                <div className="text-2xl font-semibold mb-2">Medical Excellence</div>
+                <div className="text-lg opacity-80">Professional Healthcare Team</div>
+                <div className="mt-4 flex justify-center space-x-1">
+                  <div className="text-2xl">🩺</div>
+                </div>
+              </div>
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary-600/10 to-transparent rounded-lg"></div>
           </div>
         </div>
       </div>
