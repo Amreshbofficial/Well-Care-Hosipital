@@ -1,3 +1,5 @@
+import { FaUserMd } from 'react-icons/fa';
+
 const DoctorAvailability = () => {
   const doctors = [
     { name: "Dr. Kumaresapathy", specialty: "Orthopedic", timing: "On Call" },
@@ -14,22 +16,30 @@ const DoctorAvailability = () => {
           <p className="text-xl text-gray-600">Current schedule of our medical consultants</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-white rounded-lg shadow-xl overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
+            <table className="w-full text-left table-auto">
               <thead className="bg-primary-600 text-white">
-                <tr>
-                  <th className="px-6 py-4 text-left">Name</th>
-                  <th className="px-6 py-4 text-left">Specialty</th>
-                  <th className="px-6 py-4 text-left">OPD Timing</th>
+                <tr className="border-b border-primary-700">
+                  <th className="px-6 py-4 text-lg font-semibold">Name</th>
+                  <th className="px-6 py-4 text-lg font-semibold">Specialty</th>
+                  <th className="px-6 py-4 text-lg font-semibold">OPD Timing</th>
                 </tr>
               </thead>
               <tbody>
                 {doctors.map((doctor, index) => (
-                  <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                    <td className="px-6 py-4 font-medium">{doctor.name}</td>
-                    <td className="px-6 py-4">{doctor.specialty}</td>
-                    <td className="px-6 py-4">{doctor.timing}</td>
+                  <tr
+                    key={index}
+                    className={`border-b border-gray-200 transition-colors duration-200 ${
+                      index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                    } hover:bg-primary-50`}
+                  >
+                    <td className="px-6 py-4 font-medium flex items-center">
+                      <FaUserMd className="text-primary-600 mr-3" />
+                      {doctor.name}
+                    </td>
+                    <td className="px-6 py-4 text-gray-700">{doctor.specialty}</td>
+                    <td className="px-6 py-4 text-lg text-primary-800 font-bold">{doctor.timing}</td>
                   </tr>
                 ))}
               </tbody>

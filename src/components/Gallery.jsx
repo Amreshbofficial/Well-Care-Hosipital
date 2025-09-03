@@ -1,5 +1,22 @@
+import { useState } from 'react';
+// Import your gallery images here
+import galleryImage1 from '../assets/images/gallery-1.webp';
+import galleryImage2 from '../assets/images/gallery-2.webp';
+import galleryImage3 from '../assets/images/gallery-3.webp';
+import galleryImage4 from '../assets/images/gallery-4.webp';
+import galleryImage5 from '../assets/images/gallery-5.webp';
+import galleryImage6 from '../assets/images/gallery-6.webp';
+
+
 const Gallery = () => {
-  const galleryItems = Array(6).fill(null);
+  const galleryItems = [
+    { src: galleryImage1, alt: 'Hospital Gallery Image 1' },
+    { src: galleryImage2, alt: 'Hospital Gallery Image 2' },
+    { src: galleryImage3, alt: 'Hospital Gallery Image 3' },
+    { src: galleryImage4, alt: 'Hospital Gallery Image 4' },
+    { src: galleryImage5, alt: 'Hospital Gallery Image 5' },
+    { src: galleryImage6, alt: 'Hospital Gallery Image 6' },
+  ];
 
   return (
     <section className="section-padding bg-white">
@@ -10,11 +27,13 @@ const Gallery = () => {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {galleryItems.map((_, index) => (
-            <div key={index} className="aspect-square bg-gray-200 rounded-lg overflow-hidden">
-              <div className="w-full h-full flex items-center justify-center text-gray-400">
-                Image {index + 1}
-              </div>
+          {galleryItems.map((item, index) => (
+            <div key={index} className="aspect-square rounded-lg overflow-hidden shadow-md transition-transform duration-300 hover:scale-105">
+              <img
+                src={item.src}
+                alt={item.alt}
+                className="w-full h-full object-cover"
+              />
             </div>
           ))}
         </div>

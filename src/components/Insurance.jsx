@@ -1,5 +1,17 @@
+import starHealthLogo from '../assets/images/star-health-logo.webp';
+import hdfcLogo from '../assets/images/hdfc-logo.webp';
+import iciciLogo from '../assets/images/icici-logo.webp';
+import bajajLogo from '../assets/images/bajaj-logo.webp';
+import relianceLogo from '../assets/images/reliance-logo.webp';
+
 const Insurance = () => {
-  const insurers = ["Star Health", "HDFC", "ICICI", "Bajaj", "Reliance"];
+  const insurers = [
+    { name: "Star Health", logo: starHealthLogo },
+    { name: "HDFC", logo: hdfcLogo },
+    { name: "ICICI", logo: iciciLogo },
+    { name: "Bajaj", logo: bajajLogo },
+    { name: "Reliance", logo: relianceLogo },
+  ];
 
   return (
     <section className="section-padding bg-gray-50">
@@ -11,8 +23,12 @@ const Insurance = () => {
 
         <div className="flex flex-wrap justify-center gap-8">
           {insurers.map((insurer, index) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="text-lg font-medium text-gray-700">{insurer}</div>
+            <div key={index} className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:scale-105 flex items-center justify-center text-center">
+              <img
+                src={insurer.logo}
+                alt={`${insurer.name} Logo`}
+                className="h-16 w-auto object-contain"
+              />
             </div>
           ))}
         </div>

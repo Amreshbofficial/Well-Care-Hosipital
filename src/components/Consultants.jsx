@@ -1,12 +1,18 @@
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
+// Import doctor images
+import drSameerRahman from '../assets/images/dr-sameer-rahman.webp';
+import drPriyaElangovan from '../assets/images/dr-priya-elangovan.webp';
+import drNaveenIqbal from '../assets/images/dr-naveen-iqbal.webp';
+import drFathimaBanu from '../assets/images/dr-fathima-banu.webp';
+
 const Consultants = () => {
   const consultants = [
-    { name: "Dr. Sameer Rahman", specialty: "Cardiologist" },
-    { name: "Dr. Priya Elangovan", specialty: "Gynecologist" },
-    { name: "Dr. Naveen Iqbal", specialty: "Neurologist" },
-    { name: "Dr. Fathima Banu", specialty: "Pediatrician" },
+    { name: "Dr. Sameer Rahman", specialty: "Cardiologist", image: drSameerRahman },
+    { name: "Dr. Priya Elangovan", specialty: "Gynecologist", image: drPriyaElangovan },
+    { name: "Dr. Naveen Iqbal", specialty: "Neurologist", image: drNaveenIqbal },
+    { name: "Dr. Fathima Banu", specialty: "Pediatrician", image: drFathimaBanu },
   ];
 
   return (
@@ -20,13 +26,18 @@ const Consultants = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {consultants.map((doctor, index) => (
             <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="h-48 bg-gray-200 flex items-center justify-center">
-                <div className="text-4xl text-gray-400">👨‍⚕️</div>
+              {/* Image div updated for circular display */}
+              <div className="h-48 w-48 rounded-full overflow-hidden mx-auto mt-8 border-14 border-primary-100 flex items-center justify-center">
+                <img
+                  src={doctor.image}
+                  alt={doctor.name}
+                  className="h-full w-full object-cover object-top"
+                />
               </div>
-              <div className="p-6">
+              <div className="p-6 text-center">
                 <h3 className="text-xl font-semibold mb-2">{doctor.name}</h3>
                 <p className="text-primary-600 mb-4">{doctor.specialty}</p>
-                <button className="text-primary-600 hover:text-primary-700 font-medium flex items-center">
+                <button className="text-primary-600 hover:text-primary-700 font-medium flex items-center justify-center mx-auto">
                   View Profile <FaArrowRight className="ml-2" />
                 </button>
               </div>

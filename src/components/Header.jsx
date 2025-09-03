@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaPhone, FaEnvelope, FaUser, FaBars, FaTimes } from 'react-icons/fa';
+import doctorImage from '../assets/images/doctor-stethoscope.webp';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -113,21 +114,12 @@ const Header = () => {
 
       {/* Hero Section with Doctor and Stethoscope */}
       <section className="bg-gradient-to-r from-primary-700 to-primary-900 text-white relative overflow-hidden">
-        {/* Doctor Illustration */}
-        <div className="absolute right-0 bottom-0 w-1/3 lg:w-1/4 opacity-90">
-          <svg viewBox="0 0 500 500" className="w-full h-auto">
-            <path d="M350,300c-20-30-50-50-80-60c-10-3-20-5-30-5c-20,0-40,5-60,15c-15,7-30,20-40,35c-7,10-12,25-12,40
-              c0,25,15,45,35,55c15,7,35,10,55,5c20-5,40-15,55-30c10-10,20-25,25-40c3-10,5-20,5-30C355,320,353,310,350,300z" fill="#ffffff"/>
-            <path d="M250,150c-30,0-55,25-55,55c0,30,25,55,55,55c30,0,55-25,55-55C305,175,280,150,250,150z" fill="#ffffff"/>
-            <path d="M200,250c-5,0-10,5-10,10c0,5,5,10,10,10c5,0,10-5,10-10C210,255,205,250,200,250z" fill="#0c4a6e"/>
-            <path d="M300,250c-5,0-10,5-10,10c0,5,5,10,10,10c5,0,10-5,10-10C310,255,305,250,300,250z" fill="#0c4a6e"/>
-            <path d="M230,290c0,5,5,10,10,10h20c5,0,10-5,10-10c0-5-5-10-10-10h-20C235,280,230,285,230,290z" fill="#0c4a6e"/>
-            {/* Stethoscope */}
-            <path d="M180,220c-10,0-20,5-25,15c-5,10-5,20,0,30c5,10,15,15,25,15" stroke="#ffffff" strokeWidth="8" fill="none"/>
-            <circle cx="155" cy="265" r="10" fill="#ffffff"/>
-            <path d="M150,265h-30c-5,0-10-5-10-10v-70c0-5,5-10,10-10h70c5,0,10,5,10,10v20" stroke="#ffffff" strokeWidth="5" fill="none"/>
-          </svg>
-        </div>
+        {/* Doctor Image - Updated ClassName */}
+        <img
+          src={doctorImage}
+          alt="Wellcare Hospital Doctor"
+          className="absolute right-12 bottom-0 w-1/4 lg:w-1/5 h-full object-cover opacity-90"
+        />
 
         <div className="container-custom section-padding relative z-10">
           <div className="max-w-3xl">
@@ -135,7 +127,7 @@ const Header = () => {
               Expert Care. Trusted Hands.
             </h1>
             <p className="text-xl mb-8 opacity-90">
-              We provide compassionate, advanced medical care 24/7. Our team of experienced 
+              We provide compassionate, advanced medical care 24/7. Our team of experienced
               healthcare professionals is dedicated to your well-being.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">

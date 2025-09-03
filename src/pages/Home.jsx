@@ -1,4 +1,3 @@
-import Hero from '../components/Hero';
 import Stats from '../components/Stats';
 import WhyChoose from '../components/WhyChoose';
 import Consultants from '../components/Consultants';
@@ -9,12 +8,12 @@ import Gallery from '../components/Gallery';
 import Insurance from '../components/Insurance';
 import FAQ from '../components/FAQ';
 import Newsletter from '../components/Newsletter';
+import MapSection from '../components/MapSection'; // Import the new component
 import CTA from '../components/CTA';
 
 const Home = () => {
   return (
     <div>
-      <Hero />
       <Stats />
       <WhyChoose />
       <Consultants />
@@ -25,6 +24,7 @@ const Home = () => {
       <Insurance />
       <FAQ />
       <Newsletter />
+      <MapSection /> {/* Add the new component here */}
       <CTA />
     </div>
   );

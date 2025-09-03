@@ -5,13 +5,13 @@ const FAQ = () => {
 
   const faqs = [
     {
-      question: "Do you have ambulance services available 24/7?",
-      answer: "Yes, we provide 24/7 ambulance services for emergency situations."
+      question: "Do you offer 24/7 ambulance service?",
+      answer: "Yes, we operate round-the-clock ambulance services within Trichy and surrounding districts.",
     },
     {
-      question: "Do you offer teleconsultation services?",
-      answer: "Yes, we offer teleconsultation services for follow-up appointments and non-emergency consultations."
-    }
+      question: "Can I consult a doctor online?",
+      answer: "Yes, we offer teleconsultation services for select departments. Contact our help desk to schedule a slot.",
+    },
   ];
 
   const toggleFAQ = (index) => {
