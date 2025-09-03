@@ -1,11 +1,19 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { FaPhone, FaEnvelope, FaUser, FaBars, FaTimes } from 'react-icons/fa';
+import { useState, useContext, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FaPhone, FaEnvelope, FaUser, FaBars, FaTimes, FaSignOutAlt, FaTachometerAlt } from 'react-icons/fa';
 import doctorImage from '../assets/images/doctor-stethoscope.webp';
+import { AuthContext } from '../AuthContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { isLoggedIn, logout } = useContext(AuthContext);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -67,13 +75,27 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
+              {isLoggedIn && (
+                <Link
+                  to="/admin"
+                  className="font-medium text-gray-700 hover:text-primary-600"
+                >
+                  <FaTachometerAlt className="inline-block mr-2" /> Admin
+                </Link>
+              )}
             </nav>
 
-            {/* Login Button */}
+            {/* Login/Logout Button */}
             <div className="hidden lg:flex items-center">
-              <button className="flex items-center text-gray-700 hover:text-primary-600">
-                <FaUser className="mr-2" /> Login
-              </button>
+              {isLoggedIn ? (
+                <button onClick={handleLogout} className="flex items-center text-gray-700 hover:text-primary-600">
+                  <FaSignOutAlt className="mr-2" /> Logout
+                </button>
+              ) : (
+                <Link to="/login" className="flex items-center text-gray-700 hover:text-primary-600">
+                  <FaUser className="mr-2" /> Login
+                </Link>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -103,9 +125,24 @@ const Header = () => {
                     {item.name}
                   </Link>
                 ))}
-                <button className="flex items-center text-gray-700 pt-2">
-                  <FaUser className="mr-2" /> Login
-                </button>
+                {isLoggedIn && (
+                  <Link
+                    to="/admin"
+                    className="font-medium py-2 text-gray-700"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <FaTachometerAlt className="inline-block mr-2" /> Admin
+                  </Link>
+                )}
+                {isLoggedIn ? (
+                  <button onClick={handleLogout} className="flex items-center text-gray-700 pt-2">
+                    <FaSignOutAlt className="mr-2" /> Logout
+                  </button>
+                ) : (
+                  <Link to="/login" className="flex items-center text-gray-700 pt-2">
+                    <FaUser className="mr-2" /> Login
+                  </Link>
+                )}
               </div>
             </nav>
           )}

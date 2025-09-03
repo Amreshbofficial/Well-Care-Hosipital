@@ -1,12 +1,31 @@
+import { useState, useEffect } from 'react';
 import { FaUserMd } from 'react-icons/fa';
 
 const DoctorAvailability = () => {
-  const doctors = [
-    { name: "Dr. Kumaresapathy", specialty: "Orthopedic", timing: "On Call" },
-    { name: "Dr. Geethan", specialty: "Orthopedic", timing: "On Call" },
-    { name: "Dr. Priya Elangovan", specialty: "Gynecologist", timing: "On Call" },
-    { name: "Dr. Naveen Iqbal", specialty: "Neurologist", timing: "On Call" },
-  ];
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/doctors');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setDoctors(data);
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDoctors();
+  }, []);
+
+  if (loading) return <div className="section-padding text-center">Loading...</div>;
+  if (error) return <div className="section-padding text-center text-red-500">Error: {error}</div>;
 
   return (
     <section className="section-padding bg-gray-50">
@@ -28,8 +47,8 @@ const DoctorAvailability = () => {
               </thead>
               <tbody>
                 {doctors.map((doctor, index) => (
-                  <tr
-                    key={index}
+                  <tr 
+                    key={index} 
                     className={`border-b border-gray-200 transition-colors duration-200 ${
                       index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
                     } hover:bg-primary-50`}

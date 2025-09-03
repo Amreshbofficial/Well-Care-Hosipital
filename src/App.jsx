@@ -10,6 +10,10 @@ import HospitalDetails from './pages/HospitalDetails';
 import Careers from './pages/Careers';
 import Contact from './pages/Contact';
 import BookAppointment from './pages/BookAppointment';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import AdminDashboard from './pages/AdminDashboard'; // Import AdminDashboard
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -26,7 +30,10 @@ function App() {
             <Route path="/hospital-details" element={<HospitalDetails />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/book-appointment" element={<BookAppointment />} />
+            <Route path="/book-appointment" element={<ProtectedRoute><BookAppointment /></ProtectedRoute>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/admin" element={<AdminDashboard />} /> {/* Add the new admin route */}
           </Routes>
         </main>
         <Footer />

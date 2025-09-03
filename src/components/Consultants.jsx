@@ -1,19 +1,32 @@
+import { useState, useEffect } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-// Import doctor images
-import drSameerRahman from '../assets/images/dr-sameer-rahman.webp';
-import drPriyaElangovan from '../assets/images/dr-priya-elangovan.webp';
-import drNaveenIqbal from '../assets/images/dr-naveen-iqbal.webp';
-import drFathimaBanu from '../assets/images/dr-fathima-banu.webp';
-
 const Consultants = () => {
-  const consultants = [
-    { name: "Dr. Sameer Rahman", specialty: "Cardiologist", image: drSameerRahman },
-    { name: "Dr. Priya Elangovan", specialty: "Gynecologist", image: drPriyaElangovan },
-    { name: "Dr. Naveen Iqbal", specialty: "Neurologist", image: drNaveenIqbal },
-    { name: "Dr. Fathima Banu", specialty: "Pediatrician", image: drFathimaBanu },
-  ];
+  const [consultants, setConsultants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchConsultants = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/doctors');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setConsultants(data);
+      } catch (e) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchConsultants();
+  }, []);
+
+  if (loading) return <div className="section-padding text-center">Loading...</div>;
+  if (error) return <div className="section-padding text-center text-red-500">Error: {error}</div>;
 
   return (
     <section className="section-padding bg-white">
@@ -26,8 +39,7 @@ const Consultants = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {consultants.map((doctor, index) => (
             <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              {/* Image div updated for circular display */}
-              <div className="h-48 w-48 rounded-full overflow-hidden mx-auto mt-8 border-14 border-primary-100 flex items-center justify-center">
+              <div className="h-56 w-56 rounded-full overflow-hidden mx-auto mt-6 border-4 border-primary-100 flex items-center justify-center">
                 <img
                   src={doctor.image}
                   alt={doctor.name}
