@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -5,15 +6,17 @@ const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 5000;
+const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/wellcare_hospital';
+const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173';
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: corsOrigin,
     credentials: true
 }));
 
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/wellcare_hospital')
+mongoose.connect(mongoUri)
 .then(() => console.log('MongoDB connected successfully'))
 .catch(err => console.error('MongoDB connection error:', err));
 
