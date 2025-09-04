@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaSignInAlt } from 'react-icons/fa';
 import { AuthContext } from '../AuthContext';
+import { parseJSONSafe } from '../utils/api';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -28,17 +29,24 @@ const Login = () => {
         body: JSON.stringify(formData),
       });
 
+      // Read and parse the response safely (avoids "Unexpected token '<'" when server returns HTML)
+      const data = await parseJSONSafe(response);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Login failed');
+        // Server returned JSON error object
+        throw new Error(data && data.message ? data.message : 'Login failed');
       }
 
-      const { token } = await response.json();
+      const { token } = data;
+      if (!token) throw new Error('No token received from server');
+
       localStorage.setItem('token', token);
       login();
       navigate('/admin'); // Redirect to admin dashboard
     } catch (err) {
-      setError(err.message);
+      console.error(err);
+      // Show a friendly message; parseJSONSafe already logs raw HTML to console when applicable
+      setError(err.message || 'Server returned an unexpected response. Check console for details.');
     } finally {
       setLoading(false);
     }
