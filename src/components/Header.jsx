@@ -1,6 +1,6 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaPhone, FaEnvelope, FaUser, FaBars, FaTimes, FaSignOutAlt, FaTachometerAlt } from 'react-icons/fa';
+import { FaPhone, FaEnvelope, FaUser, FaBars, FaTimes, FaSignOutAlt } from 'react-icons/fa';
 import doctorImage from '../assets/images/doctor-stethoscope.webp';
 import { AuthContext } from '../AuthContext';
 
@@ -75,14 +75,6 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              {isLoggedIn && (
-                <Link
-                  to="/admin"
-                  className="font-medium text-gray-700 hover:text-primary-600"
-                >
-                  <FaTachometerAlt className="inline-block mr-2" /> Admin
-                </Link>
-              )}
             </nav>
 
             {/* Login/Logout Button */}
@@ -125,15 +117,6 @@ const Header = () => {
                     {item.name}
                   </Link>
                 ))}
-                {isLoggedIn && (
-                  <Link
-                    to="/admin"
-                    className="font-medium py-2 text-gray-700"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <FaTachometerAlt className="inline-block mr-2" /> Admin
-                  </Link>
-                )}
                 {isLoggedIn ? (
                   <button onClick={handleLogout} className="flex items-center text-gray-700 pt-2">
                     <FaSignOutAlt className="mr-2" /> Logout

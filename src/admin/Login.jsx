@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaSignInAlt } from 'react-icons/fa';
 import { AuthContext } from '../AuthContext';
 
@@ -36,7 +36,7 @@ const Login = () => {
       const { token } = await response.json();
       localStorage.setItem('token', token);
       login();
-      navigate('/'); // Redirect to home page
+      navigate('/admin'); // Redirect to admin dashboard
     } catch (err) {
       setError(err.message);
     } finally {
@@ -45,9 +45,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-160px)] bg-gray-50 p-6">
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 p-6">
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md transition-all duration-300 transform hover:scale-105">
-        <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">User Login</h2>
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">Admin Login</h2>
         {error && <div className="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">{error}</div>}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="relative">
@@ -87,9 +87,6 @@ const Login = () => {
             <FaSignInAlt />
           </button>
         </form>
-        <p className="mt-6 text-center text-gray-600">
-          Don't have an account? <Link to="/register" className="text-primary-600 font-semibold hover:underline">Register here</Link>
-        </p>
       </div>
     </div>
   );

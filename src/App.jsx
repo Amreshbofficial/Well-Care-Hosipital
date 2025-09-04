@@ -10,10 +10,15 @@ import HospitalDetails from './pages/HospitalDetails';
 import Careers from './pages/Careers';
 import Contact from './pages/Contact';
 import BookAppointment from './pages/BookAppointment';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import AdminDashboard from './pages/AdminDashboard'; // Import AdminDashboard
 import ProtectedRoute from './components/ProtectedRoute';
+
+// Import regular user authentication pages
+import UserLogin from './pages/Login';
+import UserRegister from './pages/Register';
+
+// Import admin pages
+import AdminDashboard from './admin/AdminDashboard';
+import AdminLogin from './admin/Login';
 
 function App() {
   return (
@@ -30,10 +35,15 @@ function App() {
             <Route path="/hospital-details" element={<HospitalDetails />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/contact" element={<Contact />} />
+            
+            {/* User routes */}
+            <Route path="/login" element={<UserLogin />} />
+            <Route path="/register" element={<UserRegister />} />
             <Route path="/book-appointment" element={<ProtectedRoute><BookAppointment /></ProtectedRoute>} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/admin" element={<AdminDashboard />} /> {/* Add the new admin route */}
+
+            {/* Admin-only routes (protected) */}
+            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+            <Route path="/admin/login" element={<AdminLogin />} />
           </Routes>
         </main>
         <Footer />

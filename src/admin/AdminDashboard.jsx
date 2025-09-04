@@ -1,9 +1,11 @@
 import { useState, useEffect, useContext } from 'react';
-import { FaEdit, FaTrash, FaPlus, FaSave, FaTimes } from 'react-icons/fa';
+import { FaEdit, FaTrash, FaPlus, FaSave, FaTimes, FaSignOutAlt } from 'react-icons/fa';
 import { AuthContext } from '../AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const AdminDashboard = () => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -101,6 +103,11 @@ const AdminDashboard = () => {
     setFile(null);
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
   if (!isLoggedIn) {
     return <div className="section-padding text-center text-red-500">You must be logged in to view this page.</div>;
   }
@@ -111,7 +118,14 @@ const AdminDashboard = () => {
   return (
     <div className="section-padding">
       <div className="container-custom">
-        <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center text-gray-900">Admin Dashboard</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Admin Dashboard</h1>
+          <button onClick={handleLogout} className="btn-secondary flex items-center space-x-2">
+            <FaSignOutAlt />
+            <span>Logout</span>
+          </button>
+        </div>
+        
         <div className="flex justify-end mb-6">
           <button onClick={() => openModal()} className="btn-primary flex items-center space-x-2">
             <FaPlus />
