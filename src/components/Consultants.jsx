@@ -2,6 +2,10 @@ import { useState, useEffect } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
+// Create an API service file
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
+
 const Consultants = () => {
   const [consultants, setConsultants] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,9 +31,9 @@ const Consultants = () => {
     fetchConsultants();
   }, []);
 
-  if (loading) return <LoadingSpinner />;
-  if (error) return <ErrorMessage message={error} />;
-  if (!consultants.length) return <NoDataFound message="No consultants available" />;
+  if (loading) return <div>Loading Consultants...</div>;
+  if (error) return <div className="text-red-500">Error: {error}</div>;
+
 
   return (
     <section className="section-padding bg-white">

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -29,48 +29,33 @@ import ManageDepartments from './admin/Departments';
 function App() {
   return (
     <Router>
-      <div className="App min-h-screen flex flex-col">
-        <Routes>
-          {/* User-facing routes */}
-          <Route path="/*" element={<UserLayout />} />
-
-          {/* Admin routes */}
-          <Route path="/admin/*" element={<AdminRoutes />} />
-        </Routes>
-      </div>
-    </Router>
-  );
-}
-
-// Layout for user-facing pages
-const UserLayout = () => (
-  <>
-    <Header />
-    <main className="flex-grow">
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/departments" element={<Departments />} />
-        <Route path="/consultants" element={<Consultants />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/hospital-details" element={<HospitalDetails />} />
-        <Route path="/careers" element={<Careers />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<UserLogin />} />
-        <Route path="/register" element={<UserRegister />} />
-        <Route path="/book-appointment" element={<ProtectedRoute><BookAppointment /></ProtectedRoute>} />
-      </Routes>
-    </main>
-    <Footer />
-  </>
-);
+        {/* User-facing routes */}
+        <Route path="/" element={<UserLayout />}>
+          <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+          <Route path="departments" element={<Departments />} />
+          <Route path="consultants" element={<Consultants />} />
+          <Route path="services" element={<Services />} />
+          <Route path="hospital-details" element={<HospitalDetails />} />
+          <Route path="careers" element={<Careers />} />
+          <Route path="contact" element={<Contact />} />
+          <Route path="login" element={<UserLogin />} />
+          <Route path="register" element={<UserRegister />} />
+          <Route
+            path="book-appointment"
+            element={
+              <ProtectedRoute>
+                <BookAppointment />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
 
-// Group admin routes
-const AdminRoutes = () => (
-    <Routes>
-        <Route path="login" element={<AdminLogin />} />
+        {/* Admin routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
         <Route
-            path="/"
+            path="/admin"
             element={
                 <ProtectedRoute>
                     <AdminLayout>
@@ -80,7 +65,7 @@ const AdminRoutes = () => (
             }
         />
         <Route
-            path="doctors"
+            path="/admin/doctors"
             element={
                 <ProtectedRoute>
                     <AdminLayout>
@@ -90,7 +75,7 @@ const AdminRoutes = () => (
             }
         />
         <Route
-            path="appointments"
+            path="/admin/appointments"
             element={
                 <ProtectedRoute>
                     <AdminLayout>
@@ -100,7 +85,7 @@ const AdminRoutes = () => (
             }
         />
         <Route
-            path="patients"
+            path="/admin/patients"
             element={
                 <ProtectedRoute>
                     <AdminLayout>
@@ -110,7 +95,7 @@ const AdminRoutes = () => (
             }
         />
         <Route
-            path="departments"
+            path="/admin/departments"
             element={
                 <ProtectedRoute>
                     <AdminLayout>
@@ -119,8 +104,20 @@ const AdminRoutes = () => (
                 </ProtectedRoute>
             }
         />
-    </Routes>
-);
+      </Routes>
+    </Router>
+  );
+}
 
+// Layout for user-facing pages
+const UserLayout = () => (
+  <div className="App min-h-screen flex flex-col">
+    <Header />
+    <main className="flex-grow">
+      <Outlet />
+    </main>
+    <Footer />
+  </div>
+);
 
 export default App;

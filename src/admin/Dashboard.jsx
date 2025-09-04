@@ -1,45 +1,43 @@
 import { useState, useEffect } from 'react';
 import { FaUserMd, FaCalendarAlt, FaUserInjured, FaBuilding } from 'react-icons/fa';
 
+// Use the Vite environment variable for the API base URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 const Dashboard = () => {
     const [stats, setStats] = useState({ doctors: 0, appointments: 0, patients: 0, departments: 0 });
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
     const token = localStorage.getItem('token');
 
-    // Create an API service file
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
-
-const fetchStats = async () => {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/stats`, {
-            headers: { 
-                'x-auth-token': token,
-                'Content-Type': 'application/json'
-            }
-        });
-        if (!response.ok) throw new Error('Failed to fetch stats');
-        return await response.json();
-    } catch (error) {
-        throw new Error(`Error fetching stats: ${error.message}`);
-    }
-};
-
     useEffect(() => {
-        const fetchStats = async () => {
+        const fetchStatsData = async () => {
+            if (!token) {
+                setError("No authentication token found.");
+                setLoading(false);
+                return;
+            }
             try {
-                const response = await fetch('http://localhost:5000/api/stats', {
-                    headers: { 'x-auth-token': token }
+                const response = await fetch(`${API_BASE_URL}/api/stats`, {
+                    headers: { 
+                        'x-auth-token': token,
+                        'Content-Type': 'application/json'
+                    }
                 });
-                if (!response.ok) throw new Error('Failed to fetch stats');
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to fetch stats');
+                }
                 const data = await response.json();
                 setStats(data);
-            } catch (error) {
-                console.error('Error fetching stats:', error);
+            } catch (err) {
+                console.error('Error fetching stats:', err);
+                setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
-        fetchStats();
+        fetchStatsData();
     }, [token]);
 
     const statCards = [
@@ -51,6 +49,10 @@ const fetchStats = async () => {
 
     if (loading) {
         return <div>Loading dashboard...</div>
+    }
+
+    if (error) {
+        return <div className="p-4 text-red-700 bg-red-100 rounded-lg">Error: {error}</div>
     }
 
     return (
