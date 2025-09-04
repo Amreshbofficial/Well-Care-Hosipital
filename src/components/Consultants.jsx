@@ -41,7 +41,7 @@ const Consultants = () => {
             <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               <div className="h-56 w-56 rounded-full overflow-hidden mx-auto mt-6 border-4 border-primary-100 flex items-center justify-center">
                 <img
-                  src={doctor.image}
+                  src={`http://localhost:5000${doctor.image}`}
                   alt={doctor.name}
                   className="h-full w-full object-cover object-top"
                 />

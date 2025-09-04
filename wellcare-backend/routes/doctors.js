@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = 'uploads/';
     if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
+        fs.mkdirSync(dir, { recursive: true }); // Ensure directory is created
     }
     cb(null, dir);
   },
@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
 // POST a new doctor (protected route with image upload)
 router.post('/', auth, upload.single('image'), async (req, res) => {
   const { name, specialty, profile, timing } = req.body;
-  
+
   if (!req.file) {
     return res.status(400).json({ message: 'Image is required' });
   }

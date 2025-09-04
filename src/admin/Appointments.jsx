@@ -24,8 +24,10 @@ const Appointments = () => {
     };
 
     useEffect(() => {
-        fetchAppointments();
-    }, []);
+        if (token) {
+            fetchAppointments();
+        }
+    }, [token]);
 
     const handleUpdateStatus = async (id, status) => {
         try {
