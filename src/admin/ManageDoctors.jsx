@@ -1,31 +1,21 @@
-import { useState, useEffect, useContext } from 'react';
-import { FaEdit, FaTrash, FaPlus, FaSave, FaTimes, FaSignOutAlt } from 'react-icons/fa';
-import { AuthContext } from '../AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { FaEdit, FaTrash, FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 
-const AdminDashboard = () => {
-  const { isLoggedIn, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
+const ManageDoctors = () => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentDoctor, setCurrentDoctor] = useState(null);
-  const [formData, setFormData] = useState({ name: '', specialty: '', timing: '' });
+  const [formData, setFormData] = useState({ name: '', specialty: '', timing: '', profile: '' });
   const [file, setFile] = useState(null);
 
   const token = localStorage.getItem('token');
 
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
-
   const fetchDoctors = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/doctors');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      if (!response.ok) throw new Error('Failed to fetch doctors');
       const data = await response.json();
       setDoctors(data);
     } catch (e) {
@@ -35,25 +25,34 @@ const AdminDashboard = () => {
     }
   };
 
+  useEffect(() => {
+    fetchDoctors();
+  }, []);
+
   const handleChange = (e) => {
-    if (e.target.name === 'imageFile') {
-      setFile(e.target.files[0]);
-    } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
-    }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const method = currentDoctor ? 'PUT' : 'POST';
-    const url = currentDoctor ? `http://localhost:5000/api/doctors/${currentDoctor._id}` : 'http://localhost:5000/api/doctors';
+    setError('');
     
-    const form = new FormData();
-    form.append('name', formData.name);
-    form.append('specialty', formData.specialty);
-    form.append('timing', formData.timing);
+    const method = currentDoctor ? 'PUT' : 'POST';
+    const url = currentDoctor 
+      ? `http://localhost:5000/api/doctors/${currentDoctor._id}` 
+      : 'http://localhost:5000/api/doctors';
+    
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('specialty', formData.specialty);
+    data.append('timing', formData.timing);
+    data.append('profile', formData.profile || '');
     if (file) {
-      form.append('image', file);
+      data.append('image', file);
     }
     
     try {
@@ -61,8 +60,9 @@ const AdminDashboard = () => {
         method,
         headers: {
           'x-auth-token': token,
+          // DO NOT set 'Content-Type': 'multipart/form-data'. The browser does it automatically for FormData.
         },
-        body: form,
+        body: data,
       });
 
       if (!response.ok) {
@@ -70,9 +70,8 @@ const AdminDashboard = () => {
         throw new Error(errorData.message || `Failed to ${method === 'POST' ? 'add' : 'update'} doctor`);
       }
 
-      fetchDoctors();
+      await fetchDoctors();
       setIsModalOpen(false);
-      setFile(null);
     } catch (e) {
       setError(e.message);
     }
@@ -89,7 +88,7 @@ const AdminDashboard = () => {
           const errorData = await response.json();
           throw new Error(errorData.message || 'Failed to delete doctor');
         }
-        fetchDoctors();
+        await fetchDoctors();
       } catch (e) {
         setError(e.message);
       }
@@ -98,35 +97,19 @@ const AdminDashboard = () => {
 
   const openModal = (doctor = null) => {
     setCurrentDoctor(doctor);
-    setFormData(doctor ? doctor : { name: '', specialty: '', timing: '' });
-    setIsModalOpen(true);
+    setFormData(doctor ? { ...doctor } : { name: '', specialty: '', timing: '', profile: '' });
     setFile(null);
+    setError('');
+    setIsModalOpen(true);
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
-
-  if (!isLoggedIn) {
-    return <div className="section-padding text-center text-red-500">You must be logged in to view this page.</div>;
-  }
-
-  if (loading) return <div className="section-padding text-center">Loading...</div>;
-  if (error) return <div className="section-padding text-center text-red-500">Error: {error}</div>;
-
+  if (loading) return <div className="text-center p-6">Loading doctors...</div>;
+  
   return (
-    <div className="section-padding">
-      <div className="container-custom">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900">Admin Dashboard</h1>
-          <button onClick={handleLogout} className="btn-secondary flex items-center space-x-2">
-            <FaSignOutAlt />
-            <span>Logout</span>
-          </button>
-        </div>
-        
-        <div className="flex justify-end mb-6">
+    <div>
+        {error && <div className="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg">{error}</div>}
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">Manage Doctors</h1>
           <button onClick={() => openModal()} className="btn-primary flex items-center space-x-2">
             <FaPlus />
             <span>Add New Doctor</span>
@@ -136,28 +119,23 @@ const AdminDashboard = () => {
         <div className="bg-white rounded-lg shadow-xl overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left table-auto">
-              <thead className="bg-primary-600 text-white">
-                <tr className="border-b border-primary-700">
-                  <th className="px-6 py-4 text-lg font-semibold">Name</th>
-                  <th className="px-6 py-4 text-lg font-semibold">Specialty</th>
-                  <th className="px-6 py-4 text-lg font-semibold">OPD Timing</th>
-                  <th className="px-6 py-4 text-lg font-semibold text-center">Actions</th>
-                </tr>
-              </thead>
+              {/* ... table headers ... */}
               <tbody>
                 {doctors.map((doctor, index) => (
-                  <tr key={doctor._id} className={`border-b border-gray-200 transition-colors duration-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
+                  <tr key={doctor._id} className={`border-b border-gray-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}>
                     <td className="px-6 py-4 font-medium flex items-center">
-                      <div className="h-12 w-12 rounded-full overflow-hidden mr-4">
-                        <img src={`http://localhost:5000${doctor.image}`} alt={doctor.name} className="h-full w-full object-cover object-top" />
-                      </div>
+                      <img 
+                        src={`http://localhost:5000${doctor.image}`} 
+                        alt={doctor.name} 
+                        className="h-12 w-12 rounded-full object-cover mr-4" 
+                      />
                       {doctor.name}
                     </td>
                     <td className="px-6 py-4 text-gray-700">{doctor.specialty}</td>
-                    <td className="px-6 py-4 text-lg text-primary-800 font-bold">{doctor.timing}</td>
+                    <td className="px-6 py-4 font-bold">{doctor.timing}</td>
                     <td className="px-6 py-4 text-center space-x-4">
-                      <button onClick={() => openModal(doctor)} className="text-blue-500 hover:text-blue-700 transition-colors"><FaEdit /></button>
-                      <button onClick={() => handleDelete(doctor._id)} className="text-red-500 hover:text-red-700 transition-colors"><FaTrash /></button>
+                      <button onClick={() => openModal(doctor)} className="text-blue-500 hover:text-blue-700"><FaEdit size={18} /></button>
+                      <button onClick={() => handleDelete(doctor._id)} className="text-red-500 hover:text-red-700"><FaTrash size={18} /></button>
                     </td>
                   </tr>
                 ))}
@@ -171,27 +149,27 @@ const AdminDashboard = () => {
             <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-lg">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold">{currentDoctor ? 'Edit Doctor' : 'Add New Doctor'}</h2>
-                <button onClick={() => setIsModalOpen(false)} className="text-gray-500 hover:text-gray-800"><FaTimes size={24} /></button>
+                <button onClick={() => setIsModalOpen(false)}><FaTimes size={24} /></button>
               </div>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <input name="name" value={formData.name} onChange={handleChange} placeholder="Name" required className="w-full p-3 border rounded" />
                 <input name="specialty" value={formData.specialty} onChange={handleChange} placeholder="Specialty" required className="w-full p-3 border rounded" />
-                <input type="file" name="imageFile" onChange={handleChange} className="w-full p-3 border rounded" />
                 <input name="timing" value={formData.timing} onChange={handleChange} placeholder="OPD Timing" required className="w-full p-3 border rounded" />
+                <textarea name="profile" value={formData.profile} onChange={handleChange} placeholder="Doctor Profile" className="w-full p-3 border rounded"></textarea>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Doctor Image</label>
+                  <input type="file" name="image" onChange={handleFileChange} className="w-full p-3 border rounded" />
+                </div>
                 <div className="flex justify-end space-x-4">
                   <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary">Cancel</button>
-                  <button type="submit" className="btn-primary flex items-center space-x-2">
-                    <FaSave />
-                    <span>Save</span>
-                  </button>
+                  <button type="submit" className="btn-primary flex items-center space-x-2"><FaSave /><span>Save</span></button>
                 </div>
               </form>
             </div>
           </div>
         )}
-      </div>
     </div>
   );
 };
 
-export default AdminDashboard;
+export default ManageDoctors;
