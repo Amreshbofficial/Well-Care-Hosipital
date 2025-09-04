@@ -11,6 +11,7 @@ import Careers from './pages/Careers';
 import Contact from './pages/Contact';
 import BookAppointment from './pages/BookAppointment';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminProtectedRoute from './components/AdminProtectedRoute'; // Import the new component
 
 // Import regular user authentication pages
 import UserLogin from './pages/Login';
@@ -24,7 +25,6 @@ import AdminLogin from './admin/Login';
 import Appointments from './admin/Appointments';
 import Patients from './admin/Patients';
 import ManageDepartments from './admin/Departments';
-
 
 function App() {
   return (
@@ -57,51 +57,51 @@ function App() {
         <Route
             path="/admin"
             element={
-                <ProtectedRoute>
+                <AdminProtectedRoute>
                     <AdminLayout>
                         <AdminDashboard />
                     </AdminLayout>
-                </ProtectedRoute>
+                </AdminProtectedRoute>
             }
         />
         <Route
             path="/admin/doctors"
             element={
-                <ProtectedRoute>
+                <AdminProtectedRoute>
                     <AdminLayout>
                         <ManageDoctors />
                     </AdminLayout>
-                </ProtectedRoute>
+                </AdminProtectedRoute>
             }
         />
         <Route
             path="/admin/appointments"
             element={
-                <ProtectedRoute>
+                <AdminProtectedRoute>
                     <AdminLayout>
                         <Appointments />
                     </AdminLayout>
-                </ProtectedRoute>
+                </AdminProtectedRoute>
             }
         />
         <Route
             path="/admin/patients"
             element={
-                <ProtectedRoute>
+                <AdminProtectedRoute>
                     <AdminLayout>
                         <Patients />
                     </AdminLayout>
-                </ProtectedRoute>
+                </AdminProtectedRoute>
             }
         />
         <Route
             path="/admin/departments"
             element={
-                <ProtectedRoute>
+                <AdminProtectedRoute>
                     <AdminLayout>
                         <ManageDepartments />
                     </AdminLayout>
-                </ProtectedRoute>
+                </AdminProtectedRoute>
             }
         />
       </Routes>
