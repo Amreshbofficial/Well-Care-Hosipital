@@ -17,39 +17,110 @@ import UserLogin from './pages/Login';
 import UserRegister from './pages/Register';
 
 // Import admin pages
-import AdminDashboard from './admin/AdminDashboard';
+import AdminLayout from './admin/AdminLayout';
+import AdminDashboard from './admin/Dashboard';
+import ManageDoctors from './admin/ManageDoctors';
 import AdminLogin from './admin/Login';
+import Appointments from './admin/Appointments';
+import Patients from './admin/Patients';
+import ManageDepartments from './admin/Departments';
+
 
 function App() {
   return (
     <Router>
       <div className="App min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/departments" element={<Departments />} />
-            <Route path="/consultants" element={<Consultants />} />
-            <Route path="/services" element={<Services />} />
-            <Route path="/hospital-details" element={<HospitalDetails />} />
-            <Route path="/careers" element={<Careers />} />
-            <Route path="/contact" element={<Contact />} />
-            
-            {/* User routes */}
-            <Route path="/login" element={<UserLogin />} />
-            <Route path="/register" element={<UserRegister />} />
-            <Route path="/book-appointment" element={<ProtectedRoute><BookAppointment /></ProtectedRoute>} />
+        <Routes>
+          {/* User-facing routes */}
+          <Route path="/*" element={<UserLayout />} />
 
-            {/* Admin-only routes (protected) */}
-            <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-            <Route path="/admin/login" element={<AdminLogin />} />
-          </Routes>
-        </main>
-        <Footer />
+          {/* Admin routes */}
+          <Route path="/admin/*" element={<AdminRoutes />} />
+        </Routes>
       </div>
     </Router>
   );
 }
+
+// Layout for user-facing pages
+const UserLayout = () => (
+  <>
+    <Header />
+    <main className="flex-grow">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/departments" element={<Departments />} />
+        <Route path="/consultants" element={<Consultants />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/hospital-details" element={<HospitalDetails />} />
+        <Route path="/careers" element={<Careers />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<UserLogin />} />
+        <Route path="/register" element={<UserRegister />} />
+        <Route path="/book-appointment" element={<ProtectedRoute><BookAppointment /></ProtectedRoute>} />
+      </Routes>
+    </main>
+    <Footer />
+  </>
+);
+
+// Group admin routes
+const AdminRoutes = () => (
+    <Routes>
+        <Route path="login" element={<AdminLogin />} />
+        <Route
+            path="/"
+            element={
+                <ProtectedRoute>
+                    <AdminLayout>
+                        <AdminDashboard />
+                    </AdminLayout>
+                </ProtectedRoute>
+            }
+        />
+        <Route
+            path="doctors"
+            element={
+                <ProtectedRoute>
+                    <AdminLayout>
+                        <ManageDoctors />
+                    </AdminLayout>
+                </ProtectedRoute>
+            }
+        />
+        <Route
+            path="appointments"
+            element={
+                <ProtectedRoute>
+                    <AdminLayout>
+                        <Appointments />
+                    </AdminLayout>
+                </ProtectedRoute>
+            }
+        />
+        <Route
+            path="patients"
+            element={
+                <ProtectedRoute>
+                    <AdminLayout>
+                        <Patients />
+                    </AdminLayout>
+                </ProtectedRoute>
+            }
+        />
+        <Route
+            path="departments"
+            element={
+                <ProtectedRoute>
+                    <AdminLayout>
+                        <ManageDepartments />
+                    </AdminLayout>
+                </ProtectedRoute>
+            }
+        />
+    </Routes>
+);
+
 
 export default App;
