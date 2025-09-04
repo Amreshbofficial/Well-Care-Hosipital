@@ -10,7 +10,8 @@ const Consultants = () => {
   useEffect(() => {
     const fetchConsultants = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/doctors');
+        setLoading(true);
+        const response = await fetch(`${API_BASE_URL}/api/doctors`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -18,6 +19,7 @@ const Consultants = () => {
         setConsultants(data);
       } catch (e) {
         setError(e.message);
+        console.error('Error fetching consultants:', e);
       } finally {
         setLoading(false);
       }
@@ -25,8 +27,9 @@ const Consultants = () => {
     fetchConsultants();
   }, []);
 
-  if (loading) return <div className="section-padding text-center">Loading...</div>;
-  if (error) return <div className="section-padding text-center text-red-500">Error: {error}</div>;
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage message={error} />;
+  if (!consultants.length) return <NoDataFound message="No consultants available" />;
 
   return (
     <section className="section-padding bg-white">

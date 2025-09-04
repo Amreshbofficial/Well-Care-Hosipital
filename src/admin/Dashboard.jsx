@@ -6,6 +6,24 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const token = localStorage.getItem('token');
 
+    // Create an API service file
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
+
+const fetchStats = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/stats`, {
+            headers: { 
+                'x-auth-token': token,
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) throw new Error('Failed to fetch stats');
+        return await response.json();
+    } catch (error) {
+        throw new Error(`Error fetching stats: ${error.message}`);
+    }
+};
+
     useEffect(() => {
         const fetchStats = async () => {
             try {
