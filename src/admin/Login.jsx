@@ -20,7 +20,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch('http://localhost:5000/api/admin/auth/login', { // <-- இந்த URL சரியாக உள்ளதா என சரிபார்க்கவும்
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const Login = () => {
       const { token } = await response.json();
       localStorage.setItem('token', token);
       login();
-      navigate('/admin'); // Redirect to admin dashboard
+      navigate('/admin');
     } catch (err) {
       setError(err.message);
     } finally {

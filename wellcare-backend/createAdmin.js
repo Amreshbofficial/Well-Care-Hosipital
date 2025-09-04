@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const User = require('./models/User');
+const Admin = require('./models/Admin'); // Use the Admin model
 
 const createAdmin = async () => {
   try {
@@ -9,7 +9,7 @@ const createAdmin = async () => {
 
     const hashedPassword = await bcrypt.hash('adminpassword', 10); // Change 'adminpassword' to your desired password
 
-    const adminUser = new User({
+    const adminUser = new Admin({
       username: 'admin',
       email: 'admin@wellcare.com',
       password: hashedPassword,
