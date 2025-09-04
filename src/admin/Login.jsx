@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaSignInAlt } from 'react-icons/fa';
 import { AuthContext } from '../AuthContext';
+import { parseJSONSafe } from '../utils/api';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -15,34 +16,35 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
-    try {
-      const response = await fetch('http://localhost:5000/api/admin/auth/login', { // Corrected URL
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+  try {
+    const response = await fetch('http://localhost:5000/api/admin/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: formData.email, password: formData.password }),
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Login failed');
-      }
+    // Use safe parser instead of response.json() directly
+    const data = await parseJSONSafe(response);
 
-      const { token } = await response.json();
-      localStorage.setItem('token', token);
-      login();
-      navigate('/admin'); // Redirect to admin dashboard
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    if (!response.ok) {
+      // server returned a JSON error object (or we parsed something)
+      throw new Error(data.message || 'Login failed');
     }
-  };
+
+    // success: handle token / redirect / save user
+    localStorage.setItem('token', data.token);
+    // ...other success logic
+  } catch (err) {
+    console.error(err);
+    setError(err.message || 'An unexpected error occurred');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 p-6">
